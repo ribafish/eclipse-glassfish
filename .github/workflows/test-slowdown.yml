@@ -33,7 +33,17 @@ jobs:
         run: rm .mvn/extensions.xml
 
       - name: Build with Maven
+        id: build
         run: ./repeat.sh "mvn ${{ matrix.goals }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
+
+      - name: Set summary
+        run: |
+          echo "## Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Develocity: ${{ matrix.develocity }}" >> $GITHUB_STEP_SUMMARY
+          echo "Goals: ${{ matrix.goals }}" >> $GITHUB_STEP_SUMMARY
+          echo "Cache: ${{ matrix.cache }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.build.outputs.times }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.build.outputs.average }}" >> $GITHUB_STEP_SUMMARY
 
