@@ -23,10 +23,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Install Maven
-        run: |
-          curl.exe -o ./apache-maven-3.9.9-bin.zip https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.zip
-          tar -xf ./apache-maven-3.9.9-bin.zip
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.9
 
       - name: Conditionally remove Develocity and CCUD extensions
         if: matrix.develocity == false
@@ -35,7 +35,7 @@ jobs:
       - name: Build with Maven
         # qa skips documentation - we check it on Jenkins CI
         # We skip checkstyle too - we check it on Jenkins CI
-        run: ./apache-maven-3.9.9/bin/mvn ${{ matrix.command }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/
+        run: ./repeat.sh "${{ matrix.command }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
 
