@@ -1,0 +1,41 @@
+name: Test slowdown
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "feature/testSlowdown" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+       matrix:
+         command: ["clean install -Pfastest -T4C", "clean package verify"]
+         cache: ["-Ddevelocity.cache.local.enabled=false", "-Ddevelocity.cache.local.enabled=true"]
+         develocity: [true, false]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Install Maven
+        run: |
+          curl.exe -o ./apache-maven-3.9.9-bin.zip https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.zip
+          tar -xf ./apache-maven-3.9.9-bin.zip
+
+      - name: Conditionally remove Develocity and CCUD extensions
+        if: matrix.develocity == false
+        run: rm .mvn/extensions.xml
+
+      - name: Build with Maven
+        # qa skips documentation - we check it on Jenkins CI
+        # We skip checkstyle too - we check it on Jenkins CI
+        run: ./apache-maven-3.9.9/bin/mvn ${{ matrix.command }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/
+        env:
+          DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
+
