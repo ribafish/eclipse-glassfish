@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
        matrix:
-         command: ["clean install -Pfastest -T4C", "clean package verify"]
+         goals: ["clean install -Pfastest -T4C", "clean package verify"]
          cache: ["-Ddevelocity.cache.local.enabled=false", "-Ddevelocity.cache.local.enabled=true"]
          develocity: [true, false]
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Build with Maven
         # qa skips documentation - we check it on Jenkins CI
         # We skip checkstyle too - we check it on Jenkins CI
-        run: ./repeat.sh "${{ matrix.command }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
+        run: ./repeat.sh "mvn ${{ matrix.goals }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
 
