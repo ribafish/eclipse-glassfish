@@ -10,7 +10,7 @@ if [ -z "$command" ]; then
 fi
 
 # Number of iterations
-iterations=3
+iterations=20
 
 # Array to store execution times
 times=()
