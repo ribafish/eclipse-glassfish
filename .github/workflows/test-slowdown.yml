@@ -40,6 +40,7 @@ jobs:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
 
       - name: Set summary
+        if: always()
         run: |
           echo "## Summary" >> $GITHUB_STEP_SUMMARY
           echo "Develocity: ${{ matrix.develocity }}" >> $GITHUB_STEP_SUMMARY

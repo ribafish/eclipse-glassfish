@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # Get command from arguments
 command="$1"
 
@@ -9,7 +11,7 @@ if [ -z "$command" ]; then
   exit 1
 fi
 
-rm times.txt
+rm times.txt || :
 
 # Number of iterations
 iterations=2
@@ -19,7 +21,7 @@ times=()
 
 # Loop through iterations
 for i in $(seq 1 $iterations); do
-  rm output.txt
+  rm output.txt || :
   eval "$command" | tee output.txt
 
   time=$(grep "\[INFO] Total time:" output.txt)
@@ -34,7 +36,7 @@ for i in $(seq 1 $iterations); do
     seconds=$(echo "$time" | cut -d: -f2 | bc)
     time=$(echo "scale=4; (${minutes:-0} * 60) + ${seconds:-0}" | bc)
   else
-    time=$(echo "$time" | sed -E 's/.*: +([0-9.]+) s/\1/')
+    time=$(echo "$time" | sed -E 's/.*: +([0-9.]+) +s.*/\1/')
   fi
 
   times+=("$time")
