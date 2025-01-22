@@ -61,32 +61,4 @@ printf "Average execution time: %.4f seconds\n" $average
 echo "times=$(cat times.txt)" >> $GITHUB_OUTPUT
 echo "average=Average $average" >> $GITHUB_OUTPUT
 
-# Extract the total times from each line
-times=$(grep -Eo '[0-9.:]+ (s|min)' times.txt)
-
-# Convert the times to seconds
-total_times=0
-for time in $times; do
-  if echo "$time" | grep -q ":"; then
-    # Split the time into minutes and seconds
-    minutes=$(echo "$time" | cut -d: -f1)
-    seconds=$(echo "$time" | cut -d: -f2 | cut -d' ' -f1)  # Extract seconds, removing "min"
-    # Convert minutes to seconds and add to seconds
-    total_seconds=$(echo "scale=4; ($minutes * 60) + $seconds" | bc)
-  else
-    # Extract the seconds directly
-    total_seconds=$(echo "$time" | sed 's/ s//')  # Remove " s"
-  fi
-  total_times=$(echo "scale=4; $total_times + $total_seconds" | bc)
-done
-
-# Calculate the average time
-average_time=$(echo "scale=4; $total_times / ${#times[@]}" | bc)
-
-# Format and display the average time
-average_minutes=$(echo "$average_time / 60" | bc | cut -d '.' -f 1)  # Extract whole minutes
-average_seconds=$(echo "$average_time % 60" | bc | cut -d '.' -f 1)  # Extract whole seconds
-printf "Average time: %02d:%02d minutes\n" $average_minutes $average_seconds
-echo "average2=Average2 $average_minutes:$average_seconds min" >> $GITHUB_OUTPUT
-
 rm times.txt
