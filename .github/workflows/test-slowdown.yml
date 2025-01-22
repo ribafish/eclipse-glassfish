@@ -11,7 +11,7 @@ jobs:
     strategy:
        matrix:
          goals: ["clean install -Pfastest -T4C", "clean verify -T4C"]
-         cache: ["-Ddevelocity.cache.local.enabled=false", "-Ddevelocity.cache.local.enabled=true"]
+         cache: ["-Ddevelocity.cache.local.enabled=false -Dscan.tag.slowdown_no_cache", "-Ddevelocity.cache.local.enabled=true -Dscan.tag.slowdown_cache"]
          develocity: [true, false]
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,8 @@ jobs:
 
       - name: Build with Maven
         id: build
-        run: ./repeat.sh "mvn ${{ matrix.goals }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
+        run: |
+          ./repeat.sh "mvn ${{ matrix.goals }} ${{ matrix.cache }} -Ddevelocity.url=https://ge.solutions-team.gradle.com/"
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_API_TOKEN }}
 
@@ -46,4 +47,5 @@ jobs:
           echo "Cache: ${{ matrix.cache }}" >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.build.outputs.times }}" >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.build.outputs.average }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.build.outputs.average2 }}" >> $GITHUB_STEP_SUMMARY
 
