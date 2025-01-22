@@ -22,9 +22,9 @@ for i in $(seq 1 $iterations); do
   # Execute the command, capture output, and display it in real-time
 #  output=$(eval "$command" | tee /dev/tty | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
   eval "$command" | tee output.txt
-  output=$(cat output.txt | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
+#  output=$(cat output.txt | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
 
-  time=$(echo "$output" | grep "\[INFO] Total time:")
+  time=$(cat output.txt | grep "\[INFO] Total time:")
   echo "Iteration $i: $time" >> times.txt
   scan=$(cat output.txt | grep "ge.solutions-team.gradle.com")
   echo "Iteration $i scan: $scan" >> times.txt
