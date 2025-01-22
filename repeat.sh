@@ -14,7 +14,7 @@ fi
 rm times.txt || :
 
 # Number of iterations
-iterations=20
+iterations=10
 
 # Array to store execution times
 times=()
