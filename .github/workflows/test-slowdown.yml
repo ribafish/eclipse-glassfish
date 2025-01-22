@@ -47,4 +47,7 @@ jobs:
           echo "Cache: ${{ matrix.cache }}" >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.build.outputs.times }}" >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.build.outputs.average }}" >> $GITHUB_STEP_SUMMARY
+          echo "### Steps & scans" >> $GITHUB_STEP_SUMMARY
+          cat times.txt >> $GITHUB_STEP_SUMMARY
+          
 

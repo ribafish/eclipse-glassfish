@@ -9,26 +9,23 @@ if [ -z "$command" ]; then
   exit 1
 fi
 
+rm times.txt
+
 # Number of iterations
-iterations=20
+iterations=2
 
 # Array to store execution times
 times=()
 
 # Loop through iterations
 for i in $(seq 1 $iterations); do
-  # Execute the command and capture output
-  # output=$(eval "$command")
-  # Execute the command, capture output, and display it in real-time
-#  output=$(eval "$command" | tee /dev/tty | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
+  rm output.txt
   eval "$command" | tee output.txt
-#  output=$(cat output.txt | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
 
   time=$(grep "\[INFO] Total time:" output.txt)
   echo "Iteration $i: $time" >> times.txt
   scan=$(grep "ge.solutions-team.gradle.com" output.txt)
   echo "Iteration $i scan: $scan" >> times.txt
-  rm output.txt
 
   # Convert minutes to seconds if necessary
   if echo "$time" | grep -q "min"; then
@@ -58,7 +55,5 @@ average=$(echo "scale=4; $total / $iterations" | bc)
 
 printf "Average execution time: %.4f seconds\n" $average
 
-echo "times=$(cat times.txt)" >> $GITHUB_OUTPUT
+echo "Times array: ${times[@]}">> $GITHUB_OUTPUT
 echo "average=Average $average" >> $GITHUB_OUTPUT
-
-rm times.txt
