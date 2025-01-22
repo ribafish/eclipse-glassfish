@@ -11,7 +11,7 @@ jobs:
     strategy:
        matrix:
          develocity: [true, false]
-         goals: ["clean install -Pfastest -T4C", "clean install"]
+         goals: ["clean install -Pfastest -T4C -Dscan.tag.fastest", "clean install"]
          cache: ["-Ddevelocity.cache.local.enabled=false -Dscan.tag.slowdown_no_cache", "-Ddevelocity.cache.local.enabled=true -Dscan.tag.slowdown_cache"]
          exclude:
            - develocity: false
