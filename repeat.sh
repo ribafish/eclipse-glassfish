@@ -57,5 +57,5 @@ average=$(echo "scale=4; $total / $iterations" | bc)
 
 printf "Average execution time: %.4f seconds\n" $average
 
-echo "Times array: ${times[@]}">> $GITHUB_OUTPUT
-echo "average=Average $average" >> $GITHUB_OUTPUT
+echo "times=Times array: ${times[@]}">> $GITHUB_OUTPUT
+echo "average=Average: $average seconds" >> $GITHUB_OUTPUT
