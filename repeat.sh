@@ -24,9 +24,9 @@ for i in $(seq 1 $iterations); do
   eval "$command" | tee output.txt
 #  output=$(cat output.txt | grep "\[INFO] Total time:" | sed -E 's/.*:\s+([0-9.:]+)\s+(s|min).*$/\1/')
 
-  time=$(cat output.txt | grep "\[INFO] Total time:")
+  time=$(grep "\[INFO] Total time:" output.txt)
   echo "Iteration $i: $time" >> times.txt
-  scan=$(cat output.txt | grep "ge.solutions-team.gradle.com")
+  scan=$(grep "ge.solutions-team.gradle.com" output.txt)
   echo "Iteration $i scan: $scan" >> times.txt
   rm output.txt
 
