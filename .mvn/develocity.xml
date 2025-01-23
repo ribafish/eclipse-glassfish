@@ -19,10 +19,10 @@
   </buildScan>
   <buildCache>
     <local>
-      <enabled>false</enabled>
+      <enabled>#{isFalse(env['CI']) and isFalse(env['JENKINS_URL'])}</enabled>
     </local>
     <remote>
-      <enabled>false</enabled>
+      <enabled>#{isTrue(env['CI']) or isTrue(env['JENKINS_URL'])}</enabled>
       <storeEnabled>#{isTrue(env['CI']) or isTrue(env['JENKINS_URL'])}</storeEnabled>
     </remote>
   </buildCache>
